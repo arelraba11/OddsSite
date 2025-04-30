@@ -1,0 +1,59 @@
+/* Base page styling */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  padding: 20px;
+}
+
+/* Main heading */
+h1 {
+  color: #333;
+}
+
+/* Load odds button */
+button {
+  background-color: #007BFF;     /* Blue background */
+  color: white;                  /* White text */
+  padding: 10px 16px;            /* Spacing inside button */
+  border: none;
+  border-radius: 6px;            /* Rounded corners */
+  cursor: pointer;
+  margin-bottom: 20px;           /* Spacing below button */
+}
+
+/* Button hover effect */
+button:hover {
+  background-color: #0056b3;     /* Darker blue on hover */
+}
+
+/* Each match container */
+.sport {
+  background-color: white;
+  margin-bottom: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Light shadow */
+}
+
+/* Match team names */
+.match-teams {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Match time display */
+.match-time {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+/* List of odds */
+.odds ul {
+  padding-left: 16px;
+}
+
+.odds li {
+  color: #222;
+  font-size: 16px;
+}

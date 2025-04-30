@@ -1,0 +1,38 @@
+# Node modules
+node_modules/
+
+# Env files
+.env
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
+
+# IDE/editor
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build artifacts (optional)
+dist/
+build/
+
+# Coverage (אם תשתמש ב־tests)
+coverage/
+
+# Git
+.git/
+
+# Optional: local DBs or dumps
+*.sqlite
+*.db
+*.sql
+dump.sql
