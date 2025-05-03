@@ -126,17 +126,54 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("No bets selected.");
       return;
     }
-
+  
     const total = userBets.reduce((acc, b) => acc * b.odd, 1);
     const points = parseFloat(pointsInput.value);
-
+  
     if (isNaN(points) || points <= 0) {
       alert("Please enter a valid amount of points to bet.");
       return;
     }
-
-    alert(`Your bet has odds of ${total.toFixed(2)} and potential return of ${(points * total).toFixed(2)} pts.`);
-
-    // In future: send this data to backend
+  
+    // Get the token for auth
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("You must be logged in to place a bet.");
+      return;
+    }
+  
+    // Prepare the payload to send to backend
+    const payload = {
+      bets: userBets,
+      totalOdds: total.toFixed(2),
+      stake: points,
+      potentialWin: (points * total).toFixed(2),
+    };
+  
+    fetch("/api/bets", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.bet && data.bet._id) {
+          alert("Bet saved successfully!");
+          userBets.length = 0;
+          slipContainer.innerHTML = "";
+          pointsInput.value = "";
+          totalOddsDisplay.textContent = "Total Odds: 1.00";
+          winDisplay.textContent = "";
+        } else {
+          alert(data.message || "Failed to save bet.");
+        }
+      })
+      .catch((err) => {
+        console.error("Error saving bet:", err);
+        alert("Error placing bet. Please try again.");
+      });
   });
 });

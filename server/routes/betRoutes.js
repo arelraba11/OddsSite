@@ -1,12 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const { placeBet } = require("../controllers/betController");
+const { protect } = require("../middleware/authMiddleware"); 
 
-// ----------------------------------------------
-// GET /api/bets/test
-// Temporary route to verify bet routes are working
-// ----------------------------------------------
-router.get("/test", (req, res) => {
-  res.send("Bet route working");
-});
+router.post("/", protect, placeBet); 
 
 module.exports = router;
