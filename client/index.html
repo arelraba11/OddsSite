@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>OddsSite - Login/Register</title>
+  <link rel="stylesheet" href="/css/auth.css" />
+</head>
+<body>
+  <div class="auth-container">
+    <h1>Welcome to OddsSite</h1>
+    <div class="form-toggle">
+      <button id="login-btn" class="active">Login</button>
+      <button id="register-btn">Register</button>
+    </div>
+
+    <form id="login-form" class="auth-form">
+      <h2>Login</h2>
+      <label>Email</label>
+      <input type="email" name="email" required />
+      <label>Password</label>
+      <input type="password" name="password" required />
+      <button type="submit">Login</button>
+    </form>
+
+    <form id="register-form" class="auth-form hidden">
+      <h2>Register</h2>
+      <label>Username</label>
+      <input type="text" name="username" required />
+      <label>Email</label>
+      <input type="email" name="email" required />
+      <label>Password</label>
+      <input type="password" name="password" required />
+      <button type="submit">Register</button>
+    </form>
+  </div>
+
+  <script src="/js/auth.js"></script>
+</body>
+</html>
