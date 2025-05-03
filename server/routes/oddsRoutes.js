@@ -4,25 +4,26 @@ const axios = require("axios");
 
 const ODDS_API_KEY = process.env.ODDS_API_KEY;
 
-// -------------------------------------------------------------
-// GET /api/odds/sports
-// Fetches Champions League matches with head-to-head odds
-// -------------------------------------------------------------
+/**
+ * @route   GET /api/odds/sports
+ * @desc    Fetch all upcoming matches with head-to-head odds from The Odds API
+ * @access  Public
+ */
 router.get("/sports", async (req, res) => {
   try {
     const response = await axios.get(
-      "https://api.the-odds-api.com/v4/sports/soccer_uefa_champs_league/odds",
+      "https://api.the-odds-api.com/v4/sports/upcoming/odds",
       {
         params: {
-          apiKey: ODDS_API_KEY,      // Your personal API key from The Odds API
-          regions: "eu",             // Region filter: Europe
-          markets: "h2h",            // Market type: Head-to-head matchups
-          oddsFormat: "decimal",     // Odds display format: decimal
+          apiKey: ODDS_API_KEY,      // Personal API key
+          regions: "eu",             // Targeting European events
+          markets: "h2h",            // Market type: head-to-head
+          oddsFormat: "decimal",     // Display odds in decimal format
         },
       }
     );
 
-    // Send data back to the client
+    // Return fetched odds to client
     res.json(response.data);
   } catch (error) {
     console.error("Odds API error:", error.response?.data || error.message);

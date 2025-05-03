@@ -1,59 +1,130 @@
-/* Base page styling */
+/* ===== Base Styles ===== */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f8f9fa;
+  color: #222;
+}
+
+/* ===== Site Header ===== */
+.site-header {
+  background: #007BFF;
+  color: white;
   padding: 20px;
+  text-align: center;
 }
 
-/* Main heading */
-h1 {
-  color: #333;
+/* ===== Main Layout ===== */
+.main-content {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  align-items: flex-start;
 }
 
-/* Load odds button */
-button {
-  background-color: #007BFF;     /* Blue background */
-  color: white;                  /* White text */
-  padding: 10px 16px;            /* Spacing inside button */
-  border: none;
-  border-radius: 6px;            /* Rounded corners */
-  cursor: pointer;
-  margin-bottom: 20px;           /* Spacing below button */
+/* ===== Matches List Section ===== */
+.matches-list {
+  flex: 3;
 }
 
-/* Button hover effect */
-button:hover {
-  background-color: #0056b3;     /* Darker blue on hover */
+/* ===== Match Card ===== */
+.sport-card {
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Each match container */
-.sport {
-  background-color: white;
-  margin-bottom: 12px;
-  padding: 12px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Light shadow */
-}
-
-/* Match team names */
-.match-teams {
+.match-header {
   font-size: 18px;
   font-weight: bold;
 }
 
-/* Match time display */
 .match-time {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 6px;
+  color: #777;
+  margin: 8px 0;
 }
 
-/* List of odds */
-.odds ul {
-  padding-left: 16px;
+/* ===== Odds Buttons ===== */
+.odds-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
 }
 
-.odds li {
-  color: #222;
+.bet-option {
+  padding: 10px 14px;
+  background: #f1f1f1;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.bet-option:hover {
+  background: #ddd;
+}
+
+/* ===== Bet Slip Section ===== */
+.bet-slip-container {
+  flex: 1;
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bet-entry {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+/* ===== Odds Summary ===== */
+.total-odds {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.potential-return {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #444;
+}
+
+/* ===== Stake Input ===== */
+.bet-slip-container label {
+  display: block;
+  margin-top: 15px;
+  font-weight: 600;
+}
+
+#stake-input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  margin-bottom: 10px;
+  font-size: 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* ===== Submit Button ===== */
+#submit-bets-btn {
+  margin-top: 15px;
+  width: 100%;
+  padding: 12px;
+  background-color: #28a745;
+  border: none;
+  border-radius: 6px;
+  color: white;
   font-size: 16px;
+  cursor: pointer;
+}
+
+#submit-bets-btn:hover {
+  background-color: #218838;
 }
