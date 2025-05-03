@@ -1,26 +1,35 @@
 // controllers/authController.js
+
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
-// Generate JWT Token
+/**
+ * Generate a JWT token for the given user.
+ * Payload includes user ID and role.
+ */
 const generateToken = (user) => {
-  return jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
-    expiresIn: "7d",
-  });
+  return jwt.sign(
+    { id: user._id, role: user.role },
+    process.env.JWT_SECRET,
+    { expiresIn: "7d" }
+  );
 };
 
-// @desc    Register new user
-// @route   POST /api/auth/register
+/**
+ * @desc    Register a new user
+ * @route   POST /api/auth/register
+ * @access  Public
+ */
 exports.register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-    // Check for missing fields
+    // Validate input fields
     if (!username || !email || !password) {
       return res.status(400).json({ message: "All fields are required." });
     }
 
-    // Check if user already exists
+    // Check if email is already registered
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "Email already registered." });
@@ -30,7 +39,7 @@ exports.register = async (req, res) => {
     const newUser = new User({ username, email, password });
     await newUser.save();
 
-    // Send back token and user info
+    // Generate token and return user data
     const token = generateToken(newUser);
     res.status(201).json({
       token,
@@ -48,30 +57,33 @@ exports.register = async (req, res) => {
   }
 };
 
-// @desc    Login user
-// @route   POST /api/auth/login
+/**
+ * @desc    Authenticate user & get token
+ * @route   POST /api/auth/login
+ * @access  Public
+ */
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Check for missing fields
+    // Validate input fields
     if (!email || !password) {
       return res.status(400).json({ message: "All fields are required." });
     }
 
-    // Check if user exists
+    // Check for user existence
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials." });
     }
 
-    // Check password match
+    // Compare password
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials." });
     }
 
-    // Send back token and user info
+    // Generate token and return user data
     const token = generateToken(user);
     res.status(200).json({
       token,
@@ -86,5 +98,19 @@ exports.login = async (req, res) => {
   } catch (err) {
     console.error("Login error:", err);
     res.status(500).json({ message: "Server error during login." });
+  }
+};
+
+/**
+ * @desc    Get logged-in user's data
+ * @route   GET /api/auth/me
+ * @access  Private (requires token)
+ */
+exports.getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch user" });
   }
 };
