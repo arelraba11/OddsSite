@@ -1,0 +1,112 @@
+/* ========== General Layout ========== */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+/* Header section - top banner */
+header {
+  background-color: #007BFF;
+  padding: 20px;
+  color: white;
+  text-align: center;
+}
+
+/* Main content container */
+main {
+  padding: 30px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ========== Profile Card ========== */
+.profile-card {
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.profile-card h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+}
+
+.profile-info p {
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+/* ========== Section Titles ========== */
+section h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #007BFF;
+  padding-bottom: 5px;
+  color: #007BFF;
+}
+
+/* ========== Bet Card Styling ========== */
+.bet-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+}
+
+.bet-meta {
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #444;
+}
+
+.bet-card ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.bet-card li {
+  padding: 4px 0;
+  font-size: 15px;
+}
+
+.bet-date {
+  font-size: 12px;
+  color: #888;
+  margin-top: 10px;
+}
+
+/* ========== Admin Dashboard Styling ========== */
+.admin-dashboard {
+  background-color: #fff8e1;
+  padding: 20px;
+  border: 1px dashed #ffc107;
+  border-radius: 10px;
+  margin-top: 20px;
+  color: #856404;
+}
+
+/* Hide elements with this class */
+.hidden {
+  display: none;
+}
+
+/* Group container for each user's bets in admin view */
+.admin-user-group {
+  border: 2px solid #007bff;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f4faff;
+  border-radius: 10px;
+}
+
+.admin-user-group h3 {
+  color: #007bff;
+}

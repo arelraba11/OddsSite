@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>OddsSite - Profile</title>
+  <link rel="stylesheet" href="/css/profile.css" />
+</head>
+<body>
+  <!-- Header Section -->
+  <header class="site-header">
+    <h1>User Profile</h1>
+  </header>
+
+  <!-- Main Profile Content -->
+  <main class="main-content">
+
+    <!-- Basic User Information -->
+    <section class="user-info profile-card">
+      <h2>Welcome, <span id="username-display">User</span></h2>
+      <div class="profile-info">
+        <p><strong>Email:</strong> <span id="email-display"></span></p>
+        <p><strong>Points:</strong> <span id="points-display"></span></p>
+        <p><strong>Role:</strong> <span id="role-display"></span></p>
+      </div>
+    </section>
+
+    <!-- Admin Dashboard Section (Visible only for admins) -->
+    <section id="admin-dashboard" class="admin-dashboard hidden">
+      <h2>Admin Dashboard</h2>
+      <!-- Admin bets grouped by users will be rendered here via JS -->
+    </section>
+
+    <!-- User Bets Section (Visible only for regular users) -->
+    <section id="user-bets-section" class="user-section hidden">
+      <h2>Your Recent Bets</h2>
+      <div id="user-bets-container">
+        <!-- Recent bets will be dynamically injected here -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Profile Page Script -->
+  <script src="/js/profile.js"></script>
+</body>
+</html>
