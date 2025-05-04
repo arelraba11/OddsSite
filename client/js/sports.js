@@ -1,6 +1,6 @@
 // Wait until DOM is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
-  // ======== AUTHENTICATION ========
+  // ======== AUTH CHECK & USER DISPLAY ========
   const token = localStorage.getItem("token");
   if (!token) return (window.location.href = "/");
 
@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ======== DOM ELEMENTS ========
-  const loadOddsBtn = document.getElementById("load-odds-btn");
   const sportsContainer = document.getElementById("sports-container");
   const slipContainer = document.getElementById("bet-slip");
   const totalOddsDisplay = document.getElementById("total-odds-display");
@@ -22,7 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const winDisplay = document.getElementById("potential-return");
   const submitBtn = document.getElementById("submit-bets-btn");
   const profileBtn = document.getElementById("go-to-profile-btn");
-
   const userBets = [];
 
   // ======== NAVIGATION ========
@@ -30,23 +28,19 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "/profile";
   });
 
-  // ======== LOAD MATCH ODDS ========
-  loadOddsBtn?.addEventListener("click", () => {
-    fetch("/api/odds/sports")
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch odds.");
-        return res.json();
-      })
-      .then(renderMatches)
-      .catch((err) => {
-        console.error("Fetch error:", err);
-        sportsContainer.innerHTML = "<p>Error loading odds.</p>";
-      });
+  // ======== FILTER BUTTONS ========
+  document.querySelectorAll(".sport-filters button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const sport = btn.dataset.sport;
+      if (sport === "all") {
+        loadAllMatches();
+      } else {
+        loadMatchesBySport(sport);
+      }
+    });
   });
 
-  /**
-   * Render all match cards with betting options
-   */
+  // ======== HANDLE MATCH DISPLAY ========
   function renderMatches(matches) {
     sportsContainer.innerHTML = "";
 
@@ -81,13 +75,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ======== HANDLE BET SELECTION ========
+  // ======== BET SLIP SELECTION ========
   document.addEventListener("click", (e) => {
     if (!e.target.classList.contains("bet-option")) return;
 
     const { match, home, away, pick, odd } = e.target.dataset;
 
-    // Avoid duplicates
     if (userBets.some(b => b.match === match && b.pick === pick)) {
       alert("This selection is already in your bet slip.");
       return;
@@ -97,9 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
     renderBetSlip();
   });
 
-  /**
-   * Renders current bet slip and calculates total odds and potential return
-   */
+  // ======== RENDER BET SLIP & CALCULATIONS ========
   function renderBetSlip() {
     slipContainer.innerHTML = userBets.map(b => `
       <div class="bet-entry">
@@ -117,10 +108,10 @@ document.addEventListener("DOMContentLoaded", () => {
       : "";
   }
 
-  // ======== STAKE INPUT LISTENER ========
+  // ======== STAKE INPUT CHANGE ========
   pointsInput.addEventListener("input", renderBetSlip);
 
-  // ======== SUBMIT BET SLIP TO BACKEND ========
+  // ======== SUBMIT BET ========
   submitBtn?.addEventListener("click", () => {
     if (userBets.length === 0) {
       alert("No bets selected.");
@@ -174,4 +165,26 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Error placing bet. Please try again.");
       });
   });
+
+  // ======== HELPER FUNCTIONS ========
+  function loadAllMatches() {
+    fetch("/api/odds/sports")
+      .then(res => res.json())
+      .then(renderMatches)
+      .catch(err => {
+        console.error("Load all error:", err);
+      });
+  }
+
+  function loadMatchesBySport(sportKey) {
+    fetch("/api/odds/sports")
+      .then(res => res.json())
+      .then(data => {
+        const filtered = data.filter(match => match.sport_key === sportKey);
+        renderMatches(filtered);
+      })
+      .catch(err => {
+        console.error("Filter error:", err);
+      });
+  }
 });

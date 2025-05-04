@@ -1,89 +1,87 @@
-// Run after DOM is fully loaded
+// ===== Profile Page Logic =====
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
 
-  // Redirect to homepage if token is missing
+  // Redirect if no token found
   if (!token) {
     return (window.location.href = "/");
   }
 
-  // Decode JWT token to extract user data
+  // Decode JWT to extract user info
   let payload;
   try {
     payload = JSON.parse(atob(token.split(".")[1]));
   } catch (err) {
-    console.error("Invalid token:", err);
+    console.error("Invalid token format:", err);
     return (window.location.href = "/");
   }
 
-  const userId = payload.id;
-  const username = payload.username;
-  const role = payload.role;
+  const { id: userId, username, role } = payload;
 
-  // Display username and role
+  // Display username & role
   document.getElementById("username-display").textContent = username;
   document.getElementById("role-display").textContent = role;
 
-  // Load additional user info (email, points)
+  // Fetch full user details (email + points)
   fetch("/api/auth/me", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
     },
   })
-    .then((res) => {
+    .then(res => {
       if (!res.ok) throw new Error("Unauthorized");
       return res.json();
     })
-    .then((data) => {
-      document.getElementById("email-display").textContent = data.email;
-      document.getElementById("points-display").textContent = data.points;
+    .then(user => {
+      document.getElementById("email-display").textContent = user.email;
+      document.getElementById("points-display").textContent = user.points;
 
       if (role === "admin") {
-        // Show admin section
+        // Load admin dashboard
         document.getElementById("admin-dashboard").classList.remove("hidden");
-        loadAllBetsForAdmin(token);
+        loadAdminBets(token);
       } else {
-        // Show user section
+        // Load user's own bets
         document.getElementById("user-bets-section").classList.remove("hidden");
         loadUserBets(userId, token);
       }
     })
-    .catch((err) => {
-      console.error("Failed to load profile:", err);
+    .catch(err => {
+      console.error("Failed to load profile info:", err);
       window.location.href = "/";
     });
 });
 
-// ========== Load bets for regular user ==========
+// ===== Load Bets for Regular User =====
 function loadUserBets(userId, token) {
   fetch("/api/bets/user", {
-    method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
     },
   })
-    .then((res) => {
-      if (!res.ok) throw new Error("Failed to fetch bets");
+    .then(res => {
+      if (!res.ok) throw new Error("Failed to fetch user bets");
       return res.json();
     })
-    .then((bets) => {
+    .then(bets => {
       const container = document.getElementById("user-bets-container");
+      container.innerHTML = "";
 
       if (!bets.length) {
         container.innerHTML = "<p>No recent bets found.</p>";
         return;
       }
 
-      bets.forEach((bet) => {
-        const div = document.createElement("div");
-        div.className = "bet-card";
+      bets.forEach(bet => {
+        const betCard = document.createElement("div");
+        betCard.className = "bet-card";
 
-        const selections = bet.selections.map(sel => `
-          <li>${sel.home} vs ${sel.away} — Pick: <strong>${sel.pick}</strong> @ ${sel.odd}</li>
-        `).join("");
+        const selections = bet.selections.map(sel =>
+          `<li>${sel.home} vs ${sel.away} — Pick: <strong>${sel.pick}</strong> @ ${sel.odd}</li>`
+        ).join("");
 
-        div.innerHTML = `
+        betCard.innerHTML = `
           <div class="bet-meta">
             <strong>Stake:</strong> ${bet.stake} pts |
             <strong>Odds:</strong> ${bet.totalOdds} |
@@ -92,56 +90,62 @@ function loadUserBets(userId, token) {
           <ul>${selections}</ul>
           <div class="bet-date">Date: ${new Date(bet.createdAt).toLocaleString()}</div>
         `;
-        container.appendChild(div);
+
+        container.appendChild(betCard);
       });
     })
-    .catch((err) => {
-      console.error("Error loading bets:", err);
-      document.getElementById("user-bets-container").innerText = "Could not load your bets.";
+    .catch(err => {
+      console.error("Error loading user bets:", err);
+      document.getElementById("user-bets-container").textContent = "Could not load your bets.";
     });
 }
 
-// ========== Load all bets for admin view ==========
-function loadAllBetsForAdmin(token) {
+// ===== Load All Bets for Admin =====
+function loadAdminBets(token) {
   fetch("/api/bets/all", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   })
-    .then((res) => res.json())
-    .then((grouped) => {
-      const adminSection = document.getElementById("admin-dashboard");
-      adminSection.innerHTML = "";
+    .then(res => {
+      if (!res.ok) throw new Error("Failed to fetch all bets");
+      return res.json();
+    })
+    .then(grouped => {
+      const adminContainer = document.getElementById("admin-bets-container");
+      adminContainer.innerHTML = "";
 
-      Object.values(grouped).forEach(userGroup => {
-        const userDiv = document.createElement("div");
-        userDiv.classList.add("admin-user-group");
+      Object.values(grouped).forEach(user => {
+        const userBlock = document.createElement("div");
+        userBlock.className = "admin-user-block";
 
-        const title = document.createElement("h3");
-        title.textContent = `${userGroup.username} (${userGroup.email})`;
-        userDiv.appendChild(title);
+        const userHeader = document.createElement("h3");
+        userHeader.textContent = `${user.username} (${user.email})`;
+        userBlock.appendChild(userHeader);
 
-        userGroup.bets.forEach(bet => {
-          const betDiv = document.createElement("div");
-          betDiv.classList.add("bet-entry");
+        user.bets.forEach(bet => {
+          const betEntry = document.createElement("div");
+          betEntry.className = "bet-entry";
 
-          betDiv.innerHTML = `
+          const selections = bet.selections.map(sel =>
+            `${sel.home} vs ${sel.away} — Pick: ${sel.pick} @ ${sel.odd}`
+          ).join("<br>");
+
+          betEntry.innerHTML = `
             <p><strong>Stake:</strong> ${bet.stake} pts |
                <strong>Odds:</strong> ${bet.totalOdds} |
                <strong>Win:</strong> ${bet.potentialWin}</p>
-            <p>${bet.selections.map(sel =>
-              `${sel.home} vs ${sel.away} — Pick: ${sel.pick} @ ${sel.odd}`
-            ).join("<br>")}</p>
+            <p>${selections}</p>
             <small>${new Date(bet.createdAt).toLocaleString()}</small>
           `;
 
-          userDiv.appendChild(betDiv);
+          userBlock.appendChild(betEntry);
         });
 
-        adminSection.appendChild(userDiv);
+        adminContainer.appendChild(userBlock);
       });
     })
-    .catch((err) => {
-      console.error("Error loading all bets for admin:", err);
+    .catch(err => {
+      console.error("Error loading admin bets:", err);
     });
 }

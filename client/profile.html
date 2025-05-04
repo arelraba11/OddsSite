@@ -2,21 +2,25 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>OddsSite - Profile</title>
   <link rel="stylesheet" href="/css/profile.css" />
 </head>
 <body>
-  <!-- Header Section -->
+
+  <!-- ===== Top Navigation Bar ===== -->
   <header class="site-header">
-    <h1>User Profile</h1>
+    <div class="nav-bar">
+      <h1>Welcome, <span id="username-display">User</span></h1>
+    </div>
   </header>
 
-  <!-- Main Profile Content -->
+  <!-- ===== Main Profile Page Layout ===== -->
   <main class="main-content">
 
-    <!-- Basic User Information -->
-    <section class="user-info profile-card">
-      <h2>Welcome, <span id="username-display">User</span></h2>
+    <!-- ===== User Account Info ===== -->
+    <section class="profile-card">
+      <h2>Account Details</h2>
       <div class="profile-info">
         <p><strong>Email:</strong> <span id="email-display"></span></p>
         <p><strong>Points:</strong> <span id="points-display"></span></p>
@@ -24,23 +28,26 @@
       </div>
     </section>
 
-    <!-- Admin Dashboard Section (Visible only for admins) -->
+    <!-- ===== Admin Dashboard (visible only for admins) ===== -->
     <section id="admin-dashboard" class="admin-dashboard hidden">
       <h2>Admin Dashboard</h2>
-      <!-- Admin bets grouped by users will be rendered here via JS -->
+      <div id="admin-bets-container">
+        <!-- Admin bets by user will be inserted here via JS -->
+      </div>
     </section>
 
-    <!-- User Bets Section (Visible only for regular users) -->
+    <!-- ===== User Bets Section (visible only for regular users) ===== -->
     <section id="user-bets-section" class="user-section hidden">
       <h2>Your Recent Bets</h2>
       <div id="user-bets-container">
-        <!-- Recent bets will be dynamically injected here -->
+        <!-- User's own bets will be inserted here via JS -->
       </div>
     </section>
 
   </main>
 
-  <!-- Profile Page Script -->
+  <!-- ===== JS Script for Profile Page ===== -->
   <script src="/js/profile.js"></script>
+
 </body>
 </html>

@@ -2,53 +2,53 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>OddsSite - Sports Betting</title>
-
-  <!-- Page Styles -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OddsSite - Sports</title>
   <link rel="stylesheet" href="/css/sports.css" />
 </head>
 <body>
-  <!-- Header -->
+  <!-- ======= Top Navigation Bar ======= -->
   <header class="site-header">
-    <h1>Welcome back, <span id="username-display">User</span>!</h1>
+    <div class="nav-bar">
+      <h1>Welcome, <span id="username-display">User</span></h1>
+      <button id="go-to-profile-btn">My Profile</button>
+    </div>
   </header>
 
-  <!-- Main Content -->
+  <!-- ======= Sport Filter Section ======= -->
+  <div class="sport-filters">
+    <button data-sport="soccer">Soccer</button>
+    <button data-sport="basketball">Basketball</button>
+    <button data-sport="tennis">Tennis</button>
+    <button data-sport="all">All Sports</button>
+  </div>
+
+  <!-- ======= Main Content Layout ======= -->
   <main class="main-content">
-
-    <!-- Action Buttons Section -->
-    <section class="controls">
-      <button id="load-odds-btn">Load All Upcoming Matches</button>
-      <button id="go-to-profile-btn">My Profile</button>
+    <!-- Left section: match loader and match cards -->
+    <section class="match-section">
+      <div id="sports-container" class="matches-list">
+        <!-- Matches will be dynamically inserted here -->
+      </div>
     </section>
 
-    <!-- List of All Matches Will Be Injected Here -->
-    <section id="sports-container" class="matches-list">
-      <!-- Match cards will be dynamically added here -->
-    </section>
-
-    <!-- Bet Slip Section -->
+    <!-- Right section: bet slip sidebar -->
     <aside class="bet-slip-container">
       <h2>Your Bet Slip</h2>
 
-      <!-- Selected bets will appear here -->
       <div id="bet-slip" class="bet-slip"></div>
 
-      <!-- Input for staking points -->
       <label for="stake-input">Points to stake:</label>
       <input type="number" id="stake-input" min="1" value="10" />
 
-      <!-- Display for total odds and potential return -->
       <div id="total-odds-display" class="total-odds">Total Odds: 1.00</div>
       <div id="potential-return" class="potential-return">Potential Return: 10</div>
 
-      <!-- Submit bet button -->
       <button id="submit-bets-btn">Submit Bet Slip</button>
     </aside>
-
   </main>
 
-  <!-- JavaScript Logic -->
+  <!-- ======= JS Logic ======= -->
   <script src="/js/sports.js"></script>
 </body>
 </html>

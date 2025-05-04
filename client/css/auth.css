@@ -1,91 +1,129 @@
-/* ===== Reset and base styling ===== */
+/* ===== Reset & Base ===== */
 body, html {
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4;
-  }
-  
-  /* ===== Container for the auth forms ===== */
-  .auth-container {
-    max-width: 400px;
-    margin: 60px auto;
-    padding: 30px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
-  
-  /* ===== Title styling ===== */
-  .auth-container h1 {
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  .auth-container h2 {
-    margin-bottom: 15px;
-    color: #444;
-  }
-  
-  /* ===== Toggle buttons (login/register switch) ===== */
-  .form-toggle {
-    margin-bottom: 20px;
-  }
-  
-  .form-toggle button {
-    background-color: #e0e0e0;
-    border: none;
-    padding: 10px 20px;
-    margin: 0 5px;
-    cursor: pointer;
-    border-radius: 6px;
-    font-weight: bold;
-  }
-  
-  .form-toggle button.active {
-    background-color: #007BFF;
-    color: white;
-  }
-  
-  /* ===== Form structure ===== */
-  .auth-form {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-  }
-  
-  .auth-form label {
-    margin: 8px 0 4px;
-    font-size: 14px;
-    color: #555;
-  }
-  
-  .auth-form input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 14px;
-  }
-  
-  /* ===== Submit button ===== */
-  .auth-form button[type="submit"] {
-    margin-top: 20px;
-    padding: 12px;
-    background-color: #007BFF;
-    border: none;
-    border-radius: 6px;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.2s ease-in-out;
-  }
-  
-  .auth-form button[type="submit"]:hover {
-    background-color: #0056b3;
-  }
-  
-  /* ===== Utility class to hide/show forms ===== */
-  .hidden {
-    display: none;
-  }
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #1c1c1e;
+  color: #f1f1f1;
+}
+
+/* ===== Auth Container ===== */
+.auth-container {
+  max-width: 420px;
+  margin: 60px auto;
+  padding: 30px;
+  background-color: #2c2c2e;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  text-align: center;
+}
+
+/* ===== Titles ===== */
+.auth-container h1,
+.auth-container h2 {
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+/* ===== Toggle Buttons ===== */
+.form-toggle {
+  margin-bottom: 20px;
+}
+
+.form-toggle button {
+  background-color: #3a3a3c;
+  border: none;
+  padding: 10px 20px;
+  margin: 0 5px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-weight: bold;
+  color: #d1d1d1;
+  transition: background 0.2s;
+}
+
+.form-toggle button.active {
+  background-color: #0a84ff;
+  color: white;
+}
+
+/* ===== Forms ===== */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.auth-form label {
+  margin: 10px 0 4px;
+  font-size: 14px;
+  color: #c7c7cc;
+}
+
+.auth-form input {
+  padding: 12px;
+  border: 1px solid #555;
+  border-radius: 6px;
+  font-size: 15px;
+  background-color: #3a3a3c;
+  color: #f2f2f2;
+}
+
+/* ===== Submit Button ===== */
+.auth-form button[type="submit"] {
+  margin-top: 20px;
+  padding: 12px;
+  background-color: #0a84ff;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.auth-form button[type="submit"]:hover {
+  background-color: #0060df;
+}
+
+/* ===== Utility ===== */
+.hidden {
+  display: none;
+}
+
+/* ===== Error Message ===== */
+#error-message {
+  background-color: #ff3b30;
+  color: white;
+  padding: 12px;
+  border-radius: 6px;
+  margin: 15px 0;
+  font-size: 14px;
+  font-weight: bold;
+  display: none;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+#error-message:not(.hidden) {
+  display: block;
+}
+
+/* ===== Input Focus ===== */
+.auth-form input:focus {
+  outline: none;
+  border-color: #0a84ff;
+  box-shadow: 0 0 0 2px rgba(10, 132, 255, 0.4);
+  transition: 0.2s;
+}
+
+/* ===== Animation ===== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.form-toggle button:hover {
+  background-color: #505055;
+  box-shadow: 0 0 5px rgba(10, 132, 255, 0.3);
+}
