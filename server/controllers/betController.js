@@ -1,62 +1,60 @@
-const Bet = require("../models/Bet");
-const User = require("../models/User");
+const betService = require("../services/betService");
 
 /**
- * Handles placing a new bet for the authenticated user.
+ * Controller for placing a new bet
+ * @route POST /api/bets/
+ * @access Private
  */
 exports.placeBet = async (req, res) => {
   try {
     const { bets, stake, totalOdds, potentialWin } = req.body;
 
-    // Basic input validation
-    if (!bets || !stake || !totalOdds || !potentialWin) {
-      return res.status(400).json({ message: "Missing bet details." });
-    }
-
-    // Format selections for database structure
-    const formattedSelections = bets.map(b => ({
-      matchId: b.matchId,
-      home: b.home,
-      away: b.away,
-      pick: b.pick,
-      odd: b.odd
-    }));
-
-    // Create new bet document
-    const newBet = new Bet({
-      user: req.user.id,
-      selections: formattedSelections,
-      stake,
-      totalOdds,
-      potentialWin
-    });
-
-    await newBet.save();
-
-    // Deduct points from the user's balance after placing the bet
-    const updatedUser = await User.findByIdAndUpdate(
-      req.user.id,
-      { $inc: { points: -stake } }, // Subtract stake from points
-      { new: true }
-    );
+    // Call the service to place the bet
+    const result = await betService.placeBet(req.user.id, bets, stake, totalOdds, potentialWin);
 
     res.status(201).json({
       message: "Bet placed successfully.",
-      bet: newBet,
-      userPoints: updatedUser.points // Return updated points to the client
+      bet: result.bet,
+      userPoints: result.updatedPoints
     });
   } catch (error) {
     console.error("[BET] Bet placing error:", error);
-    res.status(500).json({ message: "Server error placing bet." });
+    res.status(400).json({ message: error.message });
   }
 };
 
 /**
- * Returns all bets for the currently authenticated user.
+ * Controller for manually resolving all unresolved bets
+ * @route POST /api/bets/resolve
+ * @access Admin
+ */
+exports.resolveBetsManually = async (req, res) => {
+  try {
+    const gameResults = req.body.results;
+
+    // Validate the input results array
+    if (!Array.isArray(gameResults) || gameResults.length === 0) {
+      return res.status(400).json({ message: "Missing or invalid game results." });
+    }
+
+    // Resolve all open bets using the provided results
+    const result = await betService.resolveAllUnresolvedBets(gameResults);
+
+    res.json({ message: "All unresolved bets processed.", ...result });
+  } catch (error) {
+    console.error("[BET] Manual resolve error:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+/**
+ * Controller to fetch the current user's bets
+ * @route GET /api/bets/user
+ * @access Private
  */
 exports.getUserBets = async (req, res) => {
   try {
-    const bets = await Bet.find({ user: req.user.id }).sort({ createdAt: -1 });
+    const bets = await betService.getUserBets(req.user.id);
     res.json(bets);
   } catch (error) {
     console.error("[BET] Error fetching user bets:", error);
@@ -65,33 +63,16 @@ exports.getUserBets = async (req, res) => {
 };
 
 /**
- * Admin-only: Returns all bets in the system, grouped by user.
+ * Controller to fetch all bets in the system, grouped by user
+ * @route GET /api/bets/all
+ * @access Admin
  */
 exports.getAllBetsGroupedByUser = async (req, res) => {
   try {
-    const bets = await Bet.find()
-      .populate("user", "username email")
-      .sort({ createdAt: -1 });
-
-    const grouped = {};
-
-    bets.forEach(bet => {
-      const userId = bet.user._id;
-
-      if (!grouped[userId]) {
-        grouped[userId] = {
-          username: bet.user.username,
-          email: bet.user.email,
-          bets: []
-        };
-      }
-
-      grouped[userId].bets.push(bet);
-    });
-
+    const grouped = await betService.getAllBetsGroupedByUser();
     res.json(grouped);
-  } catch (err) {
-    console.error("[BET] Error loading all bets:", err);
+  } catch (error) {
+    console.error("[BET] Error loading all bets:", error);
     res.status(500).json({ message: "Failed to load all bets." });
   }
 };

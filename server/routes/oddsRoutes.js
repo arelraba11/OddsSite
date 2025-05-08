@@ -1,3 +1,4 @@
+// routes/oddsRoutes.js
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
@@ -15,15 +16,14 @@ router.get("/sports", async (req, res) => {
       "https://api.the-odds-api.com/v4/sports/upcoming/odds",
       {
         params: {
-          apiKey: ODDS_API_KEY,      // Personal API key
-          regions: "eu",             // Targeting European events
-          markets: "h2h",            // Market type: head-to-head
-          oddsFormat: "decimal",     // Display odds in decimal format
+          apiKey: ODDS_API_KEY,
+          regions: "eu",           // European region
+          markets: "h2h",          // Head-to-head market
+          oddsFormat: "decimal",   // Decimal odds format
         },
       }
     );
 
-    // Return fetched odds to client
     res.json(response.data);
   } catch (error) {
     console.error("Odds API error:", error.response?.data || error.message);

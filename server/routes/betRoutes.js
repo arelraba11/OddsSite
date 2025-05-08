@@ -8,26 +8,26 @@ const {
   getAllBetsGroupedByUser
 } = require("../controllers/betController");
 
-// Import middleware to protect routes
+// Import authentication middleware
 const { protect } = require("../middleware/authMiddleware");
 
 /**
  * @route   GET /api/bets/all
  * @desc    Admin - Get all bets grouped by user
- * @access  Private (admin)
+ * @access  Private (admin only)
  */
 router.get("/all", protect, getAllBetsGroupedByUser);
 
 /**
  * @route   POST /api/bets/
- * @desc    Place a new bet
+ * @desc    Place a new bet for the logged-in user
  * @access  Private (authenticated users)
  */
 router.post("/", protect, placeBet);
 
 /**
  * @route   GET /api/bets/user
- * @desc    Get current user's bets
+ * @desc    Get all bets for the current logged-in user
  * @access  Private (authenticated users)
  */
 router.get("/user", protect, getUserBets);

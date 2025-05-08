@@ -2,12 +2,12 @@
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
 
-  // Redirect if no token found
+  // Redirect to home page if no token is found
   if (!token) {
     return (window.location.href = "/");
   }
 
-  // Decode JWT to extract user info
+  // Decode the JWT to extract user information
   let payload;
   try {
     payload = JSON.parse(atob(token.split(".")[1]));
@@ -18,11 +18,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const { id: userId, username, role } = payload;
 
-  // Display username & role
+  // Display username and role on the page
   document.getElementById("username-display").textContent = username;
   document.getElementById("role-display").textContent = role;
 
-  // Fetch full user details (email + points)
+  // Fetch full user details (email and current points)
   fetch("/api/auth/me", {
     method: "GET",
     headers: {
@@ -38,11 +38,11 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("points-display").textContent = user.points;
 
       if (role === "admin") {
-        // Load admin dashboard
+        // If user is admin, show admin dashboard and load all bets
         document.getElementById("admin-dashboard").classList.remove("hidden");
         loadAdminBets(token);
       } else {
-        // Load user's own bets
+        // If regular user, show their own bets
         document.getElementById("user-bets-section").classList.remove("hidden");
         loadUserBets(userId, token);
       }

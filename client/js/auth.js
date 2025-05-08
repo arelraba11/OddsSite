@@ -1,23 +1,24 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // === Grab elements ===
+  // === Grab HTML elements ===
   const registerBtn = document.getElementById("register-btn");
   const loginBtn = document.getElementById("login-btn");
   const registerForm = document.getElementById("register-form");
   const loginForm = document.getElementById("login-form");
   const errorBox = document.getElementById("error-message");
 
-  // === Utility: Display error message ===
+  // === Utility: Show an error message ===
   const showError = (message) => {
     errorBox.textContent = message;
     errorBox.classList.remove("hidden");
   };
 
+  // === Utility: Clear error message ===
   const clearError = () => {
     errorBox.textContent = "";
     errorBox.classList.add("hidden");
   };
 
-  // === Toggle between register and login forms ===
+  // === Toggle to registration form ===
   registerBtn.addEventListener("click", () => {
     registerForm.classList.remove("hidden");
     loginForm.classList.add("hidden");
@@ -26,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
     clearError();
   });
 
+  // === Toggle to login form ===
   loginBtn.addEventListener("click", () => {
     loginForm.classList.remove("hidden");
     registerForm.classList.add("hidden");
@@ -34,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     clearError();
   });
 
-  // === Handle registration form submission ===
+  // === Handle registration form submit ===
   registerForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     clearError();
@@ -64,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // === Handle login form submission ===
+  // === Handle login form submit ===
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     clearError();

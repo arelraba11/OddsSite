@@ -11,7 +11,7 @@ const betSchema = new mongoose.Schema({
       matchId: { type: String, required: true },
       home: { type: String, required: true },
       away: { type: String, required: true },
-      pick: { type: String, required: true },
+      pick: { type: String, required: true }, // "Arsenal", "Draw", "Chelsea"
       odd: { type: Number, required: true }
     }
   ],
@@ -26,6 +26,18 @@ const betSchema = new mongoose.Schema({
   potentialWin: {
     type: Number,
     required: true
+  },
+  isResolved: {
+    type: Boolean,
+    default: false
+  },
+  isWin: {
+    type: Boolean,
+    default: null
+  },
+  pointsRewarded: {
+    type: Number,
+    default: 0
   },
   createdAt: {
     type: Date,
