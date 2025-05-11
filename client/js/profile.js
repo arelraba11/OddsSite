@@ -1,13 +1,9 @@
 // ===== Profile Page Logic =====
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
+  if (!token) return (window.location.href = "/");
 
-  // Redirect to home page if no token is found
-  if (!token) {
-    return (window.location.href = "/");
-  }
-
-  // Decode the JWT to extract user information
+  // Decode JWT to extract user data
   let payload;
   try {
     payload = JSON.parse(atob(token.split(".")[1]));
@@ -18,16 +14,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const { id: userId, username, role } = payload;
 
-  // Display username and role on the page
+  // Update UI with user info
   document.getElementById("username-display").textContent = username;
   document.getElementById("role-display").textContent = role;
 
-  // Fetch full user details (email and current points)
+  // Fetch full user data (email, points)
   fetch("/api/auth/me", {
     method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { Authorization: `Bearer ${token}` },
   })
     .then(res => {
       if (!res.ok) throw new Error("Unauthorized");
@@ -38,11 +32,10 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("points-display").textContent = user.points;
 
       if (role === "admin") {
-        // If user is admin, show admin dashboard and load all bets
         document.getElementById("admin-dashboard").classList.remove("hidden");
         loadAdminBets(token);
+        setupCreateUserForm(token);
       } else {
-        // If regular user, show their own bets
         document.getElementById("user-bets-section").classList.remove("hidden");
         loadUserBets(userId, token);
       }
@@ -56,9 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // ===== Load Bets for Regular User =====
 function loadUserBets(userId, token) {
   fetch("/api/bets/user", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { Authorization: `Bearer ${token}` },
   })
     .then(res => {
       if (!res.ok) throw new Error("Failed to fetch user bets");
@@ -100,20 +91,23 @@ function loadUserBets(userId, token) {
     });
 }
 
-// ===== Load All Bets for Admin =====
+// ===== Load All Bets of Admin's Managed Users =====
 function loadAdminBets(token) {
-  fetch("/api/bets/all", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+  fetch("/api/admin/bets", {
+    headers: { Authorization: `Bearer ${token}` },
   })
     .then(res => {
-      if (!res.ok) throw new Error("Failed to fetch all bets");
+      if (!res.ok) throw new Error("Failed to fetch bets");
       return res.json();
     })
     .then(grouped => {
-      const adminContainer = document.getElementById("admin-bets-container");
+      const adminContainer = document.getElementById("admin-user-bets");
       adminContainer.innerHTML = "";
+
+      if (!Object.keys(grouped).length) {
+        adminContainer.innerHTML = "<p>No bets found for your users.</p>";
+        return;
+      }
 
       Object.values(grouped).forEach(user => {
         const userBlock = document.createElement("div");
@@ -148,4 +142,50 @@ function loadAdminBets(token) {
     .catch(err => {
       console.error("Error loading admin bets:", err);
     });
+}
+
+// ===== Admin: Handle New User Creation =====
+function setupCreateUserForm(token) {
+  const form = document.getElementById("create-user-form");
+  const msg = document.getElementById("create-user-msg");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    msg.classList.add("hidden");
+
+    const username = document.getElementById("new-username").value.trim();
+    const email = document.getElementById("new-email").value.trim();
+    const password = document.getElementById("new-password").value;
+    const points = parseInt(document.getElementById("initial-points").value);
+
+    try {
+      const res = await fetch("/api/admin/create-user", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, email, password, points })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        msg.textContent = "User created successfully.";
+        msg.classList.remove("hidden");
+        msg.style.color = "lightgreen";
+        form.reset();
+        loadAdminBets(token); // Refresh the list
+      } else {
+        msg.textContent = data.message || "Failed to create user.";
+        msg.classList.remove("hidden");
+        msg.style.color = "orange";
+      }
+    } catch (err) {
+      console.error("Error creating user:", err);
+      msg.textContent = "Server error.";
+      msg.classList.remove("hidden");
+      msg.style.color = "red";
+    }
+  });
 }
