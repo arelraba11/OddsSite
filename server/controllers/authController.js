@@ -20,45 +20,12 @@ const generateToken = (user) => {
 };
 
 /**
- * Register a new user
+ * Register a new user (disabled)
  * @route   POST /api/auth/register
- * @access  Public
+ * @access  Disabled
  */
-exports.register = async (req, res) => {
-  try {
-    const { username, email, password } = req.body;
-
-    // Ensure all fields are provided
-    if (!username || !email || !password) {
-      return res.status(400).json({ message: "All fields are required." });
-    }
-
-    // Check if email is already registered
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: "Email already registered." });
-    }
-
-    // Create and save the new user
-    const newUser = new User({ username, email, password });
-    await newUser.save();
-
-    // Respond with token and user info
-    const token = generateToken(newUser);
-    res.status(201).json({
-      token,
-      user: {
-        id: newUser._id,
-        username: newUser.username,
-        email: newUser.email,
-        role: newUser.role,
-        points: newUser.points
-      }
-    });
-  } catch (err) {
-    console.error("Register error:", err);
-    res.status(500).json({ message: "Server error during registration." });
-  }
+exports.register = (req, res) => {
+  return res.status(403).json({ message: "Registration is disabled. Contact your agent." });
 };
 
 /**

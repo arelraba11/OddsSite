@@ -25,28 +25,6 @@ body, html {
   margin-bottom: 20px;
 }
 
-/* ===== Toggle Buttons ===== */
-.form-toggle {
-  margin-bottom: 20px;
-}
-
-.form-toggle button {
-  background-color: #3a3a3c;
-  border: none;
-  padding: 10px 20px;
-  margin: 0 5px;
-  cursor: pointer;
-  border-radius: 6px;
-  font-weight: bold;
-  color: #d1d1d1;
-  transition: background 0.2s;
-}
-
-.form-toggle button.active {
-  background-color: #0a84ff;
-  color: white;
-}
-
 /* ===== Forms ===== */
 .auth-form {
   display: flex;
@@ -121,9 +99,4 @@ body, html {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-6px); }
   to { opacity: 1; transform: translateY(0); }
-}
-
-.form-toggle button:hover {
-  background-color: #505055;
-  box-shadow: 0 0 5px rgba(10, 132, 255, 0.3);
 }

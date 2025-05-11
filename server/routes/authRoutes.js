@@ -1,5 +1,3 @@
-// routes/authRoutes.js
-
 const express = require("express");
 const router = express.Router();
 
@@ -13,7 +11,7 @@ const { protect } = require("../middleware/authMiddleware");
 
 // ==========================
 // @route   POST /api/auth/register
-// @desc    Register a new user
+// @desc    [DISABLED] Registration is blocked
 // @access  Public
 // ==========================
 router.post("/register", register);

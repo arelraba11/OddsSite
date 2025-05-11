@@ -3,18 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OddsSite - Login/Register</title>
+  <title>OddsSite - Login</title>
   <link rel="stylesheet" href="/css/auth.css" />
 </head>
 <body>
   <main class="auth-container" role="main">
     <h1>Welcome to OddsSite</h1>
-
-    <!-- Toggle between Login / Register -->
-    <div class="form-toggle" role="tablist">
-      <button id="login-btn" class="active" aria-pressed="true">Login</button>
-      <button id="register-btn" aria-pressed="false">Register</button>
-    </div>
 
     <!-- Display error messages dynamically -->
     <div id="error-message" class="error-message hidden" role="alert"></div>
@@ -22,6 +16,7 @@
     <!-- Login Form -->
     <form id="login-form" class="auth-form" role="form" autocomplete="on">
       <h2>Login</h2>
+
       <label for="login-email">Email</label>
       <input type="email" name="email" id="login-email" placeholder="Enter your email" autocomplete="email" required />
 
@@ -29,21 +24,6 @@
       <input type="password" name="password" id="login-password" placeholder="Enter your password" autocomplete="current-password" required />
 
       <button type="submit" id="login-submit-btn">Login</button>
-    </form>
-
-    <!-- Register Form -->
-    <form id="register-form" class="auth-form hidden" role="form" autocomplete="on">
-      <h2>Register</h2>
-      <label for="register-username">Username</label>
-      <input type="text" name="username" id="register-username" placeholder="Choose a username" autocomplete="username" required />
-
-      <label for="register-email">Email</label>
-      <input type="email" name="email" id="register-email" placeholder="Enter your email" autocomplete="email" required />
-
-      <label for="register-password">Password</label>
-      <input type="password" name="password" id="register-password" placeholder="Create a password" autocomplete="new-password" required />
-
-      <button type="submit" id="register-submit-btn">Register</button>
     </form>
   </main>
 
